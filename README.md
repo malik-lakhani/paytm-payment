@@ -41,3 +41,4 @@ YOUR_EMAIL=bhumika@improwised.com
 
 * Add mail configuration detail also in .env file to send mail to user
 
+* Visit `/user-registration` route and make payment.
