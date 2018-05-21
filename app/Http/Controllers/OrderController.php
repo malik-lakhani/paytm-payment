@@ -130,8 +130,9 @@ class OrderController extends Controller
         $transaction = PaytmWallet::with('receive');
 
         $response = $transaction->response();
+
         $order_id = $transaction->getOrderId();
-        if($response->STATUS != 'TXN_FAILURE') {
+        if($response->STATUS == 'TXN_SUCCESS') {
             if($transaction->isSuccessful()){
                 Transaction::where('order_id',$order_id)->update(['status'=>2, 'transaction_id'=>$transaction->getTransactionId()]);
 
