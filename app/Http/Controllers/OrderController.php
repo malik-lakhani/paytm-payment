@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use PaytmWallet;
 use Illuminate\Http\Request;
 use App\User;
-use App\Transaction;
+use App\Ticket;
 use Validator;
 use DB;
 use Log;
@@ -24,7 +24,7 @@ class OrderController extends Controller
     {
         $transaction_id = $request->query->get('transaction_id');
         if(isset($transaction_id)) {
-            $transaction = Transaction::where('transaction_id',$transaction_id)->first();
+            $transaction = Ticket::where('transaction_id',$transaction_id)->first();
             if($transaction && $transaction->status == 2) {
                 return view('register')->with('successOfTransaction', "You are registered successfully and ticket sent in your email.");
             } elseif($transaction && ($transaction->status == 1 || $transaction->status == 0)) {
@@ -82,19 +82,19 @@ class OrderController extends Controller
             $user_id = $user->id;
         }
 
-        $transaction_total_count = Transaction::where('status', '=', 2)->count();
+        $transaction_total_count = Ticket::where('status', '=', 2)->count();
 
         if($transaction_total_count == 25000) {
             return Redirect::to('/user-registration')
                 ->with('errorOfTransaction', "You can't proceed because registration limit exceed.");
         }
 
-        $transaction_data = User::with('transactions')->where('adhar_no','=', $input['adhar_no'])
-            ->withCount('transactions')
+        $transaction_data = User::with('tickets')->where('adhar_no','=', $input['adhar_no'])
+            ->withCount('tickets')
             ->first();
 
         if($transaction_data && $transaction_data->transactions_count < 5) {
-            Transaction::insert([
+            Ticket::insert([
                 'user_id' => $user_id,
                 'fee' => $input['fee'],
                 'order_id' => $input['order_id'],
@@ -113,7 +113,7 @@ class OrderController extends Controller
           'mobile_number' => config('services.paytm-wallet.mobile_number'),
           'email' => config('services.paytm-wallet.email'),
           'amount' => $input['fee'],
-          'callback_url' => url('api/payment/status')
+          'callback_url' => 'http://paytm-payment-123.test/api/payment/status'
         ]);
 
         return $payment->receive();
@@ -134,14 +134,17 @@ class OrderController extends Controller
         $order_id = $transaction->getOrderId();
         if($response->STATUS == 'TXN_SUCCESS') {
             if($transaction->isSuccessful()){
-                Transaction::where('order_id',$order_id)->update(['status'=>2, 'transaction_id'=>$transaction->getTransactionId()]);
+                $uniqueId = uniqid();
 
-                $user_data = Transaction::with('user')->where('order_id', $order_id)->first();
+                Ticket::where('order_id',$order_id)->update(['status'=>2, 'transaction_id'=>$transaction->getTransactionId(), 'ticket_unique_id'=>$uniqueId]);
+
+                $user_data = Ticket::with('user')->where('order_id', $order_id)->first();
 
                 $data = [
                     'text' => $user_data->user->id,
                     'toEmail' => $user_data->user->email,
                     'subject' => 'Get register successfully',
+                    'uniqueId' => $uniqueId,
                 ];
 
                 try {
@@ -152,12 +155,12 @@ class OrderController extends Controller
 
                     return redirect()->route('user-registration', ['transaction_id' => $transaction->getTransactionId()]);
                 } catch (Exception $e) {
-                    log::info($e);
+                    Log::info($e);
                     return redirect()->route('user-registration', ['transaction_id' => $transaction->getTransactionId()]);
                 }
 
             } else if($transaction->isFailed()){
-                Transaction::where('order_id',$order_id)->update(['status'=>1, 'transaction_id'=>$transaction->getTransactionId()]);
+                Ticket::where('order_id',$order_id)->update(['status'=>1, 'transaction_id'=>$transaction->getTransactionId()]);
 
                 return redirect()->route('user-registration', ['transaction_id' => $transaction->getTransactionId()]);
             }

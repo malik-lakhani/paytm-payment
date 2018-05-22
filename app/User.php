@@ -21,8 +21,8 @@ class User extends Authenticatable
      /**
      * Get the comments for the blog post.
      */
-    public function transactions()
+    public function tickets()
     {
-        return $this->hasMany('App\Transaction')->where('status', '=', 2);
+        return $this->hasMany('App\Ticket')->where('status', '=', 2);
     }
 }
