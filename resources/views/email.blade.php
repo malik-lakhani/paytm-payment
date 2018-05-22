@@ -1,1 +1,1 @@
-Your registration id is {!! $text !!}.
+Your registration id is {!! $uniqueId !!}.

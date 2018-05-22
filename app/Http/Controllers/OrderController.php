@@ -11,6 +11,9 @@ use DB;
 use Log;
 use Mail;
 use Redirect;
+use App;
+use Storage;
+use View;
 
 class OrderController extends Controller
 {
@@ -141,16 +144,33 @@ class OrderController extends Controller
                 $user_data = Ticket::with('user')->where('order_id', $order_id)->first();
 
                 $data = [
-                    'text' => $user_data->user->id,
+                    'user_id' => $user_data->user->id,
                     'toEmail' => $user_data->user->email,
                     'subject' => 'Get register successfully',
                     'uniqueId' => $uniqueId,
                 ];
 
+                $htmlData = View::make('ticketview')
+                    ->with('data', $data)
+                    ->render();
+
+                self::generateDomPdfandSavetoServer($uniqueId, $htmlData);
+
+
+                if (config('filesystems.default') == 'local') {
+                    $path = public_path('/storage/ticket_pdf/5b03ca126d6e3_ticket.pdf');
+                } else {
+                    $path = Storage::url('ticket_pdf/5b03ca126d6e3_ticket.pdf');
+                }
+
                 try {
-                    Mail::send('email', $data, function ($message) use ($data) {
+                    Mail::send('email', $data, function ($message) use ($data, $path) {
                         Log::info('callled');
-                        $message->to($data['toEmail'])->subject($data['subject']);
+                        $message->to($data['toEmail'])
+                            ->subject($data['subject'])
+                            ->attach($path, [
+                                'mime' => 'application/pdf',
+                            ]);
                     });
 
                     return redirect()->route('user-registration', ['transaction_id' => $transaction->getTransactionId()]);
@@ -166,5 +186,16 @@ class OrderController extends Controller
             }
         }
         return redirect()->route('user-registration', ['transaction_id' => 0]);
+    }
+
+    public static function generateDomPdfandSavetoServer($ticket_unique_id, $htmlData)
+    {
+        $pdf = App::make('dompdf.wrapper');
+        $pdf->loadHtml($htmlData);
+        $pdf->setPaper('A4', 'portrait');
+        $output = $pdf->output();
+        Storage::put(
+            'ticket_pdf/'.$ticket_unique_id.'_ticket.pdf', $output
+        );
     }
 }
