@@ -48,6 +48,11 @@ class OrderController extends Controller
      */
     public function order(Request $request)
     {
+        if(strtotime(date('Y-m-d H:i:s')) > strtotime(config('app.validity_date'))){
+            return Redirect::to('/user-registration')
+                ->with('errorOfTransaction', "You are late to registration.");
+        }
+
         $input = $request->all();
         $rules = [
             'name' => 'required|max:255',
