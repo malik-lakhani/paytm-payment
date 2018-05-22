@@ -158,9 +158,9 @@ class OrderController extends Controller
 
 
                 if (config('filesystems.default') == 'local') {
-                    $path = public_path('/storage/ticket_pdf/5b03ca126d6e3_ticket.pdf');
+                    $path = public_path('/storage/ticket_pdf/'.$uniqueId.'_ticket.pdf');
                 } else {
-                    $path = Storage::url('ticket_pdf/5b03ca126d6e3_ticket.pdf');
+                    $path = Storage::url('ticket_pdf/'.$uniqueId.'_ticket.pdf');
                 }
 
                 try {
@@ -195,7 +195,7 @@ class OrderController extends Controller
         $pdf->setPaper('A4', 'portrait');
         $output = $pdf->output();
         Storage::put(
-            'ticket_pdf/'.$ticket_unique_id.'_ticket.pdf', $output
+            'public/ticket_pdf/'.$ticket_unique_id.'_ticket.pdf', $output
         );
     }
 }
