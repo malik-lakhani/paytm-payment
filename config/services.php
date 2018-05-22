@@ -45,5 +45,6 @@ return [
         'user' => env('YOUR_USER_NAME'),
         'mobile_number' => env('YOUR_MOBILE_NUMBER'),
         'email' => env('YOUR_EMAIL'),
+        'callback_url' => env('CALLBACK_URL'),
     ],
 ];

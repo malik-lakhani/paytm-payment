@@ -73,7 +73,7 @@ class OrderController extends Controller
         DB::beginTransaction();
 
         $input['order_id'] = $request->mobile_no.rand(1,100);
-        $input['fee'] = 50;
+        $input['fee'] = config('app.ticket_price');
 
         $user = User::where('adhar_no','=', $input['adhar_no'])->first();
 
@@ -92,7 +92,7 @@ class OrderController extends Controller
 
         $transaction_total_count = Ticket::where('status', '=', 2)->count();
 
-        if($transaction_total_count == 25000) {
+        if($transaction_total_count == config('app.registration_limit')) {
             return Redirect::to('/user-registration')
                 ->with('errorOfTransaction', "You can't proceed because registration limit exceed.");
         }
@@ -121,7 +121,7 @@ class OrderController extends Controller
           'mobile_number' => config('services.paytm-wallet.mobile_number'),
           'email' => config('services.paytm-wallet.email'),
           'amount' => $input['fee'],
-          'callback_url' => 'http://paytm-payment-123.test/api/payment/status'
+          'callback_url' => config('services.paytm-wallet.callback_url'),
         ]);
 
         return $payment->receive();

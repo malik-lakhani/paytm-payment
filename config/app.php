@@ -17,6 +17,10 @@ return [
 
     'validity_date' => env('VALIDITY_DATE'),
 
+    'ticket_price' => env('TICKET_PRICE'),
+
+    'registration_limit' => env('REGISTRATION_LIMIT'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
