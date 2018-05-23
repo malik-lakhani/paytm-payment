@@ -17,3 +17,5 @@ Route::get('/', function () {
 
 Route::get('user-registration', 'OrderController@register')->name('user-registration');
 Route::post('payment', 'OrderController@order');
+
+Route::get('manage/users', 'UsersController@index');

@@ -54,13 +54,6 @@ class OrderController extends Controller
         }
 
         $input = $request->all();
-        $rules = [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:60',
-            'adhar_no' => 'required|numeric|digits:12',
-            'mobile_no' => 'required|numeric|digits:10',
-            'address' => 'required',
-        ];
         // Build the validation constraint set.
         $this->validate($request, [
             'name' => 'required|max:255',

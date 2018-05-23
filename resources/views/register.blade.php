@@ -29,45 +29,48 @@
 </head>
 <body>
 
-    @if (isset($errors) && count($errors) > 0)
-        <div class="alert alert-danger">
-            <ul>
-                @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
-                @endforeach
-            </ul>
-        </div>
-    @endif
+    <div class="message-alert-container">
+        <div class="message-alert-warp-container">
+            @if (isset($errors) && count($errors) > 0)
+                <div class="alert alert-danger message-alert-div">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
 
-    @if (Session::has('errorOfTransaction'))
-        <div class="alert alert-danger">
-            <ul>
-                <li>{{ Session::get('errorOfTransaction') }}</li>
-            </ul>
-        </div>
-    @endif
+            @if (Session::has('errorOfTransaction'))
+                <div class="alert alert-danger message-alert-div">
+                    <ul>
+                        <li>{{ Session::get('errorOfTransaction') }}</li>
+                    </ul>
+                </div>
+            @endif
 
-    @if ((isset($errorOfTransaction) && !empty($errorOfTransaction)))
-        <div class="alert alert-danger">
-            <ul>
-                <li>{{ $errorOfTransaction }}</li>
-            </ul>
-        </div>
-    @endif
+            @if ((isset($errorOfTransaction) && !empty($errorOfTransaction)))
+                <div class="alert alert-danger message-alert-div">
+                    <ul>
+                        <li>{{ $errorOfTransaction }}</li>
+                    </ul>
+                </div>
+            @endif
 
-    @if (!empty($successOfTransaction))
-        <div class="alert alert-success" style="">
-            <ul>
-                <li>{{ $successOfTransaction }}</li>
-            </ul>
+            @if (!empty($successOfTransaction))
+                <div class="alert alert-success message-alert-div" style="">
+                    <ul>
+                        <li>{{ $successOfTransaction }}</li>
+                    </ul>
+                </div>
+            @endif
         </div>
-    @endif
-
+    </div>
     <div class="container-contact100">
         <div class="wrap-contact100">
             <form action="{{ url('payment') }}" class="contact100-form validate-form" method="POST" enctype="multipart/form-data">
                 <span class="contact100-form-title">
-                    Registration
+                    Buy Ticket
                 </span>
 
                 <label class="label-input100" for="first-name">Tell us your name *</label>
@@ -95,7 +98,7 @@
                 </div>
 
                 <label class="label-input100" for="message">Address *</label>
-                <div class="wrap-input100 validate-input" data-validate = "Address is required">
+                <div class="wrap-input100">
                     <textarea id="address" class="input100" name="address" placeholder="Write your address"></textarea>
                     <span class="focus-input100"></span>
                 </div>
