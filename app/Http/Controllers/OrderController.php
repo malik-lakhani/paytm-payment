@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use PaytmWallet;
 use Illuminate\Http\Request;
-use App\User;
 use App\Ticket;
 use Validator;
 use DB;
@@ -65,44 +64,34 @@ class OrderController extends Controller
 
         DB::beginTransaction();
 
-        $input['order_id'] = $request->mobile_no.rand(1,100);
+        $input['order_id'] = $request->mobile_no.str_random(6);
         $input['fee'] = config('app.ticket_price');
 
-        $user = User::where('adhar_no','=', $input['adhar_no'])->first();
+        $tickets = Ticket::where('adhar_no','=', $input['adhar_no'])->where('status', '=', 2)->count();
 
-        if(!$user) {
-            $user_id = User::insertGetId([
-                'email' => $input['email'],
-                'adhar_no' => $input['adhar_no'],
-                'name' => trim($input['name']),
-                'address' => $input['address'],
-                'mobile_no' => $input['mobile_no'],
-                'adhar_no' => $input['adhar_no'],
-            ]);
-        } else {
-            $user_id = $user->id;
+        if($tickets == 5) {
+            return Redirect::to('/user-registration')
+                ->with('errorOfTransaction', 'Your transactions limit exceed to 5.');
         }
+
+        $uniqueId = uniqid();
+
+        $ticket_id = Ticket::insertGetId([
+            'adhar_no' => $input['adhar_no'],
+            'ticket_unique_id' => $uniqueId,
+            'fee' => $input['fee'],
+            'order_id' => $input['order_id'],
+            'email' => $input['email'],
+            'name' => trim($input['name']),
+            'address' => $input['address'],
+            'mobile_no' => $input['mobile_no'],
+        ]);
 
         $transaction_total_count = Ticket::where('status', '=', 2)->count();
 
         if($transaction_total_count == config('app.registration_limit')) {
             return Redirect::to('/user-registration')
                 ->with('errorOfTransaction', "You can't proceed because registration limit exceed.");
-        }
-
-        $transaction_data = User::with('tickets')->where('adhar_no','=', $input['adhar_no'])
-            ->withCount('tickets')
-            ->first();
-
-        if($transaction_data && $transaction_data->transactions_count < 5) {
-            Ticket::insert([
-                'user_id' => $user_id,
-                'fee' => $input['fee'],
-                'order_id' => $input['order_id'],
-            ]);
-        } else {
-            return Redirect::to('/user-registration')
-                ->with('errorOfTransaction', 'Your transactions limit exceed to 5.');
         }
 
         DB::commit();
@@ -135,30 +124,55 @@ class OrderController extends Controller
         $order_id = $transaction->getOrderId();
         if($response->STATUS == 'TXN_SUCCESS') {
             if($transaction->isSuccessful()){
-                $uniqueId = uniqid();
 
-                Ticket::where('order_id',$order_id)->update(['status'=>2, 'transaction_id'=>$transaction->getTransactionId(), 'ticket_unique_id'=>$uniqueId]);
+                $count = Ticket::where('status', '=', 2)->count();
 
-                $user_data = Ticket::with('user')->where('order_id', $order_id)->first();
+                $ticket_uni_id = $count == 0 ? 1 : uniqid();
+
+                $ticket_data = Ticket::where('status', '=', 2)
+                    ->pluck('ticket_unique_id')
+                    ->toArray();
+
+                $numeric_ticket_ids = array();
+
+                foreach ($ticket_data as $value) {
+                    if(is_numeric($value)) {
+                        array_push($numeric_ticket_ids, $value);
+                    }
+                }
+
+                $max_unique_id = 0;
+
+                if(sizeof($numeric_ticket_ids) > 0) {
+                    $max_unique_id = max($numeric_ticket_ids);
+                }
+
+                if($count != 0) {
+                    $ticket_uni_id = $max_unique_id + 1;
+                }
+
+                Ticket::where('order_id',$order_id)->update(['status'=>2, 'transaction_id'=>$transaction->getTransactionId(), 'ticket_unique_id'=>$ticket_uni_id]);
+
+                $user_data = Ticket::where('order_id', $order_id)->first();
 
                 $data = [
-                    'user_id' => $user_data->user->id,
-                    'toEmail' => $user_data->user->email,
+                    'user_id' => $user_data->id,
+                    'toEmail' => $user_data->email,
                     'subject' => 'Get register successfully',
-                    'uniqueId' => $uniqueId,
+                    'uniqueId' => $ticket_uni_id,
                 ];
 
                 $htmlData = View::make('ticketview')
                     ->with('data', $data)
                     ->render();
 
-                self::generateDomPdfandSavetoServer($uniqueId, $htmlData);
+                self::generateDomPdfandSavetoServer($ticket_uni_id, $htmlData);
 
 
                 if (config('filesystems.default') == 'local') {
-                    $path = public_path('/storage/ticket_pdf/'.$uniqueId.'_ticket.pdf');
+                    $path = public_path('/storage/ticket_pdf/'.$ticket_uni_id.'_ticket.pdf');
                 } else {
-                    $path = Storage::url('ticket_pdf/'.$uniqueId.'_ticket.pdf');
+                    $path = Storage::url('ticket_pdf/'.$ticket_uni_id.'_ticket.pdf');
                 }
 
                 try {

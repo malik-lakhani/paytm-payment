@@ -104,7 +104,7 @@
                 </div>
 
                 <div class="container-contact100-form-btn">
-                    <button type="submit" class="contact100-form-btn" >Pay to PatTM</button>
+                    <button type="submit" class="contact100-form-btn" >Buy</button>
                 </div>
             </form>
 

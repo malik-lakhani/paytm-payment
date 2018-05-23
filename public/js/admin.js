@@ -54,6 +54,34 @@ function get_query(){
   return result;
 }
 
+$("#perPageTickets").change(function(e) {
+  queryString = getItemsPerPage(e.target.value);
+  var url = window.location.href;
+  var newUrl = new URL(url).pathname;
+  redirectForSearchingSorting(queryString, newUrl);
+});
+
+function getItemsPerPage(itemPerPage) {
+  var searchParam = get_query();
+  var string = "?";
+  if (searchParam.page) {
+    string += "page=" + searchParam.page + "&";
+  }
+  if (searchParam.search) {
+    string += "search=" + searchParam.search + "&";
+  }
+  // if (searchParam.filter_status) {
+  //   string += "filter_status=" + searchParam.filter_status + "&";
+  // }
+  if (itemPerPage) {
+    string += "perPage=" + itemPerPage + "&";
+  }
+  if (searchParam.order) {
+    string += "order=" + searchParam.order + "&" + "orderBy=" + searchParam.orderBy ;
+  }
+  return string;
+}
+
 // function handleKeyPress(e) {
 
 //   var key = e.keyCode || e.which;

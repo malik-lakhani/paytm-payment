@@ -38,3 +38,15 @@
     display: flex;
     justify-content: space-between;
 }
+
+.w_200 {
+  width: 200px;
+}
+
+.ml_5 {
+  margin-left: 5px;
+}
+
+.searchdiv {
+  display: flex;
+}

@@ -13,13 +13,6 @@ class Ticket extends Model
      *
      * @var array
      */
-    protected $fillable = ['transaction_id', 'user_id', 'order_id', 'fee', 'status', 'ticket_unique_id'];
+    protected $fillable = ['transaction_id', 'adhar_no', 'order_id', 'fee', 'status', 'ticket_unique_id', 'name', 'email', 'mobile_no', 'address'];
 
-    /**
-     * Get the user that owns the phone.
-     */
-    public function user()
-    {
-        return $this->belongsTo('App\User', 'user_id');
-    }
 }

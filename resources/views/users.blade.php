@@ -34,16 +34,25 @@
     <div class="card" style="margin-top: 30px">
     <div class="card-header lighten-1">
         <div class="searchdiv">
-            <h4>Users</h4>
+            <h4 style="flex-grow: 1; margin-top: 4px;">Users</h4>
             <input
               type="text"
               id="searchusers"
               name="search"
               onkeypress="handleKeyPress(event)"
               placeholder="Search"
-              class="form-control search-users"
+              class="form-control w_200 ml_5"
               value="{{ isset($filter) ? $filter : '' }}"
             >
+            <select class="form-control w_200 ml_5 no_border_radius select-menu-style" name="tickets" id="perPageTickets">
+              @foreach($ticketsItemList as $item)
+                @if(old('tickets', $itemsPerPage) == $item )
+                  <option value="{{ $item }}" selected >{{ $item }}</option>
+                @else
+                  <option value="{{ $item }}">{{ $item }}</option>
+                @endif
+              @endforeach
+            </select>
         </div>
     </div>
     <div class="card-body">
@@ -60,27 +69,24 @@
                 </tr>
             </thead>
             <tbody>
-
-                @foreach($users as $user)
-                    <tr data-toggle="collapse" data-target=".order1{{$user->id}}">
-                        <th scope="row" class="text-center">{{$user->id}}</th>
-                        <td class="text-center">{{$user->adhar_no}}</td>
+                @foreach($tickets as $ticket)
+                    <tr>
+                        <th scope="row" class="text-center">{{$ticket->id}}</th>
+                        <td class="text-center">{{$ticket->adhar_no}}</td>
                         <td class="text-center">
-                            @foreach($user->tickets as $ticket)
-                                {{ $ticket->ticket_unique_id ? $ticket->ticket_unique_id : '-' }},
-                            @endforeach
-                        </td class="text-center">
-                        <td class="text-center">{{$user->name}}</td>
-                        <td class="text-center">{{$user->email}}</td>
-                        <td class="text-center">{{$user->mobile_no}}</td>
-                        <td>{{ $user->address ? $user->address : '-' }}</td>
+                            {{ $ticket->ticket_unique_id ? $ticket->ticket_unique_id : '-' }}
+                        </td>
+                        <td class="text-center">{{$ticket->name}}</td>
+                        <td class="text-center">{{$ticket->email}}</td>
+                        <td class="text-center">{{$ticket->mobile_no}}</td>
+                        <td>{{ $ticket->address ? $ticket->address : '-' }}</td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
         <nav aria-label="Page navigation example">
           <ul class="pagination justify-content-center">
-            {{ $users->appends(Request::except('page'))->links() }}
+            {{ $tickets->appends(Request::except('page'))->links() }}
           </ul>
         </nav>
     </div>

@@ -3,28 +3,35 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\User;
+use App\Ticket;
 
 class UsersController extends Controller
 {
     public function index(Request $request)
     {
-
+        $ticketsItemList = [10, 20, 30, 40, 50];
+        $itemsPerPage = $request->perPage ? $request->perPage : 10;
         $filter = $request->has('search') ? $request->get('search') : '';
 
-        $users = User::with('tickets');
+        $tickets = Ticket::where('status', '=', 2);
 
         if ($filter = $request->get('search')) {
-            $users->where(function ($query) use ($filter) {
-                $query->where('users.adhar_no', 'LIKE','%'.$filter.'%')
-                    ->orwhere('users.name', 'LIKE','%'.$filter.'%')
-                    ->orwhere('users.email', 'LIKE','%'.$filter.'%')
-                    ->orwhere('users.mobile_no', 'LIKE','%'.$filter.'%');
+            $tickets->where(function ($query) use ($filter) {
+                $query->where('tickets.adhar_no', 'LIKE','%'.$filter.'%')
+                    ->orwhere('tickets.ticket_unique_id', 'LIKE', '%'.$filter.'%')
+                    ->orWhere('name', 'LIKE', '%'.$filter.'%')
+                    ->orWhere('email', 'LIKE', '%'.$filter.'%')
+                    ->orWhere('mobile_no', 'LIKE', '%'.$filter.'%');
             });
         }
 
-        $users = $users->paginate(10);
-        // return $users;
-        return view('users', compact('users','filter'));
+        $tickets = $tickets->paginate($itemsPerPage);
+
+        // $searchString = '';
+        // if ($request->search != null) {
+        //     $searchString = $request->search;
+        // }
+
+        return view('users', compact('tickets', 'filter', 'ticketsItemList', 'itemsPerPage'));
     }
 }
