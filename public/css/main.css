@@ -178,7 +178,7 @@ iframe {
 
 .container-contact100 {
   width: 100%;
-  min-height: 100vh;
+  min-height: 98vh;
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -187,7 +187,7 @@ iframe {
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 15px;
+  padding: 0px 15px;
   background: #f2f2f2;
 
 }
@@ -244,7 +244,7 @@ iframe {
   display: -ms-flexbox;
   display: flex;
   flex-wrap: wrap;
-  padding: 56px 55px 63px 55px;
+  padding: 20px 40px 20px 40px;
 }
 
 .contact100-form-title {
@@ -255,7 +255,7 @@ iframe {
   color: #333333;
   line-height: 1.2;
   text-align: center;
-  padding-bottom: 33px;
+  padding-bottom: 10px;
 }
 
 
@@ -436,7 +436,11 @@ textarea.input100 {
 
 @media (max-width: 576px) {
   .contact100-form {
-    padding: 56px 15px 63px 15px;
+    padding: 10px 20px 10px 20px;
+  }
+
+  .container-contact100 {
+    padding-bottom: 15px;
   }
 
   .rs1-wrap-input100,
@@ -541,4 +545,14 @@ textarea.input100 {
 
 .message-alert-div {
   margin-bottom: 0px;
+}
+
+.price-symbol {
+  font-size: 105px;
+  font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+
+.agreed-label {
+  margin-top: 10px;
+  color: #555555;
 }
