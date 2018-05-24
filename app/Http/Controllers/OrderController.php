@@ -29,7 +29,7 @@ class OrderController extends Controller
             $transaction = Ticket::where('transaction_id',$transaction_id)->first();
             if($transaction && $transaction->status == 2) {
                 return view('register')->with('successOfTransaction', "You are registered successfully and ticket sent in your email.");
-            } elseif($transaction && ($transaction->status == 1 || $transaction->status == 0)) {
+            } elseif($transaction && $transaction->status == 1) {
                 return view('register')->with('errorOfTransaction', "Your Payment Failed.Try Again.");
             } else {
                 return view('register')->with('errorOfTransaction', "Your transaction doesn't exist.");
@@ -59,7 +59,7 @@ class OrderController extends Controller
             'email' => 'required|email|max:60',
             'adhar_no' => 'required|numeric|digits:12',
             'mobile_no' => 'required|numeric|digits:10',
-            'address' => 'required',
+            'agreed' => 'required|accepted'
         ]);
 
         DB::beginTransaction();
@@ -85,6 +85,7 @@ class OrderController extends Controller
             'name' => trim($input['name']),
             'address' => $input['address'],
             'mobile_no' => $input['mobile_no'],
+            'agreed' => $input['agreed'],
         ]);
 
         $transaction_total_count = Ticket::where('status', '=', 2)->count();
@@ -122,82 +123,80 @@ class OrderController extends Controller
         $response = $transaction->response();
 
         $order_id = $transaction->getOrderId();
-        if($response->STATUS == 'TXN_SUCCESS') {
-            if($transaction->isSuccessful()){
 
-                $count = Ticket::where('status', '=', 2)->count();
+        if($transaction->isSuccessful()){
 
-                $ticket_uni_id = $count == 0 ? 1 : uniqid();
+            $count = Ticket::where('status', '=', 2)->count();
 
-                $ticket_data = Ticket::where('status', '=', 2)
-                    ->pluck('ticket_unique_id')
-                    ->toArray();
+            $ticket_uni_id = $count == 0 ? 1 : uniqid();
 
-                $numeric_ticket_ids = array();
+            $ticket_data = Ticket::where('status', '=', 2)
+                ->pluck('ticket_unique_id')
+                ->toArray();
 
-                foreach ($ticket_data as $value) {
-                    if(is_numeric($value)) {
-                        array_push($numeric_ticket_ids, $value);
-                    }
+            $numeric_ticket_ids = array();
+
+            foreach ($ticket_data as $value) {
+                if(is_numeric($value)) {
+                    array_push($numeric_ticket_ids, $value);
                 }
+            }
 
-                $max_unique_id = 0;
+            $max_unique_id = 0;
 
-                if(sizeof($numeric_ticket_ids) > 0) {
-                    $max_unique_id = max($numeric_ticket_ids);
-                }
+            if(sizeof($numeric_ticket_ids) > 0) {
+                $max_unique_id = max($numeric_ticket_ids);
+            }
 
-                if($count != 0) {
-                    $ticket_uni_id = $max_unique_id + 1;
-                }
+            if($count != 0) {
+                $ticket_uni_id = $max_unique_id + 1;
+            }
 
-                Ticket::where('order_id',$order_id)->update(['status'=>2, 'transaction_id'=>$transaction->getTransactionId(), 'ticket_unique_id'=>$ticket_uni_id]);
+            Ticket::where('order_id',$order_id)->update(['status'=>2, 'transaction_id'=>$transaction->getTransactionId(), 'ticket_unique_id'=>$ticket_uni_id]);
 
-                $user_data = Ticket::where('order_id', $order_id)->first();
+            $user_data = Ticket::where('order_id', $order_id)->first();
 
-                $data = [
-                    'user_id' => $user_data->id,
-                    'toEmail' => $user_data->email,
-                    'subject' => 'Get register successfully',
-                    'uniqueId' => $ticket_uni_id,
-                ];
+            $data = [
+                'user_id' => $user_data->id,
+                'toEmail' => $user_data->email,
+                'subject' => 'Get register successfully',
+                'uniqueId' => $ticket_uni_id,
+            ];
 
-                $htmlData = View::make('ticketview')
-                    ->with('data', $data)
-                    ->render();
+            $htmlData = View::make('ticketview')
+                ->with('data', $data)
+                ->render();
 
-                self::generateDomPdfandSavetoServer($ticket_uni_id, $htmlData);
+            self::generateDomPdfandSavetoServer($ticket_uni_id, $htmlData);
 
 
-                if (config('filesystems.default') == 'local') {
-                    $path = public_path('/storage/ticket_pdf/'.$ticket_uni_id.'_ticket.pdf');
-                } else {
-                    $path = Storage::url('ticket_pdf/'.$ticket_uni_id.'_ticket.pdf');
-                }
+            if (config('filesystems.default') == 'local') {
+                $path = public_path('/storage/ticket_pdf/'.$ticket_uni_id.'_ticket.pdf');
+            } else {
+                $path = Storage::url('ticket_pdf/'.$ticket_uni_id.'_ticket.pdf');
+            }
 
-                try {
-                    Mail::send('email', $data, function ($message) use ($data, $path) {
-                        Log::info('callled');
-                        $message->to($data['toEmail'])
-                            ->subject($data['subject'])
-                            ->attach($path, [
-                                'mime' => 'application/pdf',
-                            ]);
-                    });
-
-                    return redirect()->route('user-registration', ['transaction_id' => $transaction->getTransactionId()]);
-                } catch (Exception $e) {
-                    Log::info($e);
-                    return redirect()->route('user-registration', ['transaction_id' => $transaction->getTransactionId()]);
-                }
-
-            } else if($transaction->isFailed()){
-                Ticket::where('order_id',$order_id)->update(['status'=>1, 'transaction_id'=>$transaction->getTransactionId()]);
+            try {
+                Mail::send('email', $data, function ($message) use ($data, $path) {
+                    Log::info('callled');
+                    $message->to($data['toEmail'])
+                        ->subject($data['subject'])
+                        ->attach($path, [
+                            'mime' => 'application/pdf',
+                        ]);
+                });
 
                 return redirect()->route('user-registration', ['transaction_id' => $transaction->getTransactionId()]);
+            } catch (Exception $e) {
+                Log::info($e);
+                return redirect()->route('user-registration', ['transaction_id' => $transaction->getTransactionId()]);
             }
+
+        } else if($transaction->isFailed()){
+            Ticket::where('order_id',$order_id)->update(['status'=>1, 'transaction_id'=>$transaction->getTransactionId()]);
+
+            return redirect()->route('user-registration', ['transaction_id' => $transaction->getTransactionId()]);
         }
-        return redirect()->route('user-registration', ['transaction_id' => 0]);
     }
 
     public static function generateDomPdfandSavetoServer($ticket_unique_id, $htmlData)

@@ -103,8 +103,20 @@
                     <span class="focus-input100"></span>
                 </div>
 
+                <div class="checkbox">
+                    <label>
+                      <input
+                        type="checkbox"
+                        id="agreed"
+                        tabindex="1"
+                        name="agreed"
+                        onchange="document.getElementById('paymentBtn').disabled = !this.checked;" >
+                        Are you sure with all terms and conditions for payment?
+                    </label>
+                </div>
+
                 <div class="container-contact100-form-btn">
-                    <button type="submit" class="contact100-form-btn" >Buy</button>
+                    <button type="submit" class="contact100-form-btn" id="paymentBtn" disabled>Buy Now</button>
                 </div>
             </form>
 

@@ -18,6 +18,7 @@ class CreateTicketsTable extends Migration
             $table->string('adhar_no', 12);
             $table->string('ticket_unique_id')->unique();
             $table->tinyInteger('status')->default(0);
+            $table->enum('agreed', ['on', 'off'])->default('off');
             $table->integer('fee');
             $table->string('order_id');
             $table->string('transaction_id')->default(0);

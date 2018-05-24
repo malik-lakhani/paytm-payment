@@ -13,6 +13,6 @@ class Ticket extends Model
      *
      * @var array
      */
-    protected $fillable = ['transaction_id', 'adhar_no', 'order_id', 'fee', 'status', 'ticket_unique_id', 'name', 'email', 'mobile_no', 'address'];
+    protected $fillable = ['transaction_id', 'adhar_no', 'order_id', 'fee', 'status', 'ticket_unique_id', 'name', 'email', 'mobile_no', 'address', 'agreed'];
 
 }
