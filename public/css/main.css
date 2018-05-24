@@ -405,7 +405,13 @@ textarea.input100 {
 }
 
 .contact100-form-btn:hover {
-  background: #333333;
+  background: #b0e0ad;
+  color: black;
+}
+
+.contact100-form-btn:disabled {
+  background: #b0e0ad;
+  cursor: not-allowed
 }
 
 
