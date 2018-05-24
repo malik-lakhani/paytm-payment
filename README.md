@@ -8,37 +8,59 @@ Paytm-payment
 
 ### Set up guide
 
-* Clone the repository using the following command:
+Clone project
 
 ```
 git clone http://192.168.1.5:10080/bhumika/paytm-payment.git
 ```
 
-* Dependancies installation
+Change Directory
+
+```
+cd paytm-payment
+```
+
+Install all dependencies
 
 ```
 composer install
 ```
 
-* Set up database configuaration in .env file and Run migration
+Create a .env file
+
+```
+Create a .env file in root of the project as per `.env.example` supplied, make changes according to your detail and for more detail of merchant account please see https://business.paytm.com/.
+```
+
+Generate application key
+
+```
+php artisan key:generate
+```
+
+Link the storage
+
+```
+php artisan storage:link
+```
+
+Create database in mysql
+
+```
+create database `databaseName`
+```
+
+Database migration
 
 ```
 php artisan migrate
-```
-
-* Set paytm MERCHANT account detail in .env file for detail info see https://business.paytm.com/
 
 ```
-YOUR_MERCHANT_ID=abcSta41696263698529
-YOUR_MERCHANT_KEY=&vv3q@AY0_ZRXFIe
-YOUR_WEBSITE=WEBSTAGING
-YOUR_CHANNEL=WEB
-YOUR_INDUSTRY_TYPE=Retail
-YOUR_USER_NAME=7777777777
-YOUR_MOBILE_NUMBER=7777777777
-YOUR_EMAIL=bhumika@improwised.com
-```
 
-* Add mail configuration detail also in .env file to send mail to user
+Add mail configuration detail also in .env file to send ticket in mail to user
 
-* Visit `/user-registration` route and make payment using paytm.
+To generate ticket open `/` or `/user-registration` route and make payment using paytm.
+
+For admin user, open `manage/users` route.
+
+All ticket pdf are generated in `ticket_pdf` folder in storage/public directory.
