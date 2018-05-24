@@ -40,13 +40,11 @@ class UsersController extends Controller
 
     public function login()
     {
-        $title = 'Login';
         if (Session::has('username') && Session::get('username') == config('app.admin_username')) {
             return redirect('manage/users');
         }
 
-        return View::make('adminLogin')
-            ->with('title', $title);
+        return View::make('adminLogin');
     }
 
     public function processLogin(Request $request)

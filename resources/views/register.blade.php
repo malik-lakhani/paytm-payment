@@ -60,26 +60,26 @@
                 </span>
 
                 <label class="label-input100" for="first-name">Tell us your name *</label>
-                <div class="wrap-input100 validate-input" data-validate="Type name">
-                    <input id="name" class="input100" type="text" name="name" placeholder="Name">
+                <div class="wrap-input100 validate-input" data-validate="Enter valid name">
+                    <input id="name" class="input100" type="text" name="name" placeholder="Name" maxlength="255">
                     <span class="focus-input100"></span>
                 </div>
 
                 <label class="label-input100" for="email">Enter your email *</label>
                 <div class="wrap-input100 validate-input" data-validate = "Valid email is required: ex@abc.xyz">
-                    <input id="email" class="input100" type="text" name="email" placeholder="Eg. example@email.com">
+                    <input id="email" class="input100" type="email" name="email" placeholder="Eg. example@email.com">
                     <span class="focus-input100"></span>
                 </div>
 
-                <label class="label-input100" for="phone">Enter adhar number</label>
-                <div class="wrap-input100 validate-input" data-validate="Type valid adhar number">
+                <label class="label-input100" for="adhar_no">Enter adhar number</label>
+                <div class="wrap-input100 validate-input" data-validate="Enter valid adhar number">
                     <input id="adhar_no" class="input100" type="number" name="adhar_no" placeholder="Eg. 1234 8907 8907">
                     <span class="focus-input100"></span>
                 </div>
 
-                <label class="label-input100" for="phone">Enter mobile number</label>
-                <div class="wrap-input100 validate-input" data-validate="Type mobile number">
-                    <input id="mobile_no" class="input100" type="number" name="mobile_no" placeholder="Eg. +91 89078 89078">
+                <label class="label-input100" for="mobile_no">Enter mobile number</label>
+                <div class="wrap-input100 validate-input" data-validate="Enter valid mobile number">
+                    <input id="mobile_no" class="input100" type="number" name="mobile_no" placeholder="Eg.89078 89078">
                     <span class="focus-input100"></span>
                 </div>
 

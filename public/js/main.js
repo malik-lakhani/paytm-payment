@@ -2,10 +2,6 @@
 (function ($) {
     "use strict";
 
-
-
-  
-  
     /*==================================================================
     [ Validate ]*/
     var input = $('.validate-input .input100');
@@ -31,6 +27,25 @@
     });
 
     function validate (input) {
+
+        if($(input).attr('type') == 'text' && $(input).attr('name') == 'name') {
+            if($(input).val().length > 255 || $(input).val().trim() == '') {
+                return false;
+            }
+        }
+
+        if($(input).attr('type') == 'number' && $(input).attr('name') == 'mobile_no') {
+            if($(input).val().length > 10 || $(input).val().length < 10 || $(input).val().trim() == '') {
+                return false;
+            }
+        }
+
+        if($(input).attr('type') == 'number' && $(input).attr('name') == 'adhar_no') {
+            if($(input).val().length > 12 || $(input).val().length < 12 || $(input).val().trim() == '') {
+                return false;
+            }
+        }
+
         if($(input).attr('type') == 'email' || $(input).attr('name') == 'email') {
             if($(input).val().trim().match(/^([a-zA-Z0-9_\-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([a-zA-Z0-9\-]+\.)+))([a-zA-Z]{1,5}|[0-9]{1,3})(\]?)$/) == null) {
                 return false;
@@ -54,6 +69,6 @@
 
         $(thisAlert).removeClass('alert-validate');
     }
-    
+
 
 })(jQuery);
