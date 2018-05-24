@@ -61,6 +61,6 @@ php artisan migrate
 
 * To generate ticket open `/` or `/user-registration` route and make payment using paytm.
 
-* For admin user, open `manage/users` route.
+* For admin user, open `manage/users` route. To get login, set username and password in `.env`.
 
 * All ticket pdf are generated in `ticket_pdf` folder in storage/public directory.
