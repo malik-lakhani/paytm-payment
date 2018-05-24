@@ -20,6 +20,6 @@ class AdminAuthenticate
             return $next($request);
         }
 
-        return redirect('manage/login');
+        return redirect('manage/login')->with('error', 'Invalid username or password.');
     }
 }

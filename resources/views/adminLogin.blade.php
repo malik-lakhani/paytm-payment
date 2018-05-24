@@ -20,6 +20,11 @@
     <form class="form-signin" action="{{ url('manage/login') }}" method="POST" enctype="multipart/form-data">
       <h2 class="form-signin-heading text-center">Login</h2>
       <hr>
+      @if (Session::has('error'))
+          <div class="alert alert-danger message-alert-div">
+              {{ Session::get('error') }}
+          </div>
+      @endif
       <input type="text" class="form-control" name="username" placeholder="Username" required="" autofocus="" />
       <input type="password" class="form-control" name="password" placeholder="Password" required=""/>
       <hr>
