@@ -215,4 +215,9 @@ class OrderController extends Controller
             'public/ticket_pdf/'.$ticket_unique_id.'_ticket.pdf', $output
         );
     }
+
+    public function termsConditions()
+    {
+        return view('termsConditions');
+    }
 }

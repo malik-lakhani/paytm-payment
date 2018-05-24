@@ -15,6 +15,7 @@ Route::get('/', 'OrderController@register')->name('user-registration');
 
 Route::get('user-registration', 'OrderController@register')->name('user-registration');
 Route::post('payment', 'OrderController@order');
+Route::get('terms-conditions', 'OrderController@termsConditions');
 
 Route::prefix('manage')->group(function () {
   Route::get('login', 'UsersController@login');

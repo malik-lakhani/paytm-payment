@@ -97,7 +97,7 @@
                         tabindex="1"
                         name="agreed"
                         onchange="document.getElementById('paymentBtn').disabled = !this.checked;" >
-                        Are you sure with all terms and conditions for payment?
+                        Are you sure with all <a href="{{ url('terms-conditions') }}" target="_blank" style="color: #00ad5f;">Terms & Conditions</a> for payment?
                     </label>
                 </div>
 
