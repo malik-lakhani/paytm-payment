@@ -1,0 +1,92 @@
+<!-- <!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+
+    <title>Ticket</title>
+  </head>
+  <body>
+    <div>
+      Thank you for your order.
+
+      Your order has been received and is now being processed. Your order detail are shown below for your reference:
+
+      OrderId: 9725227251f8rjWY
+      OrderDate: 02-02-2018 09:30
+      Ticket Id: 1
+      Total price: 50
+    </div>
+    <br>
+    <div>
+      Customer Detail:
+
+      Name: bhumika
+
+      Email: bhumika@gmail.com
+
+      Mobile NO: 1231231231
+
+      Adhar NO: 123123123112
+    </div>
+  </body>
+</html> -->
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+body {
+    font-family: Arial;
+}
+
+.coupon {
+    border: 5px dotted #bbb;
+    width: 80%;
+    border-radius: 15px;
+    margin: 0 auto;
+    max-width: 600px;
+}
+
+.container {
+    padding: 2px 16px;
+    background-color: #f1f1f1;
+}
+
+.promo {
+    background: #ccc;
+    padding: 6px;
+}
+</style>
+</head>
+<body>
+
+<div class="coupon">
+  <div class="container">
+    <h3>Ticket: 1</h3>
+  </div>
+  <div class="container" style="background-color:white">
+    <h2><b>Thank you for your order.</b></h2>
+    <p>Your order has been received and is now being processed. Your order detail are shown below for your reference:</p>
+    <h3>Order Detail:</h3>
+    <p>
+      OrderId: 9725227251f8rjWY<br><br>
+      OrderDate: 02-02-2018 09:30<br><br>
+    </p>
+    <h3>Customer Detail:</h3>
+    <p>
+      Name: bhumika<br><br>
+      Email: bhumika@gmail.com<br><br>
+      Mobile No: 1231231231<br><br>
+      Adhar No: 123123123112<br><br>
+    </p>
+  </div>
+  <div class="container">
+    <p>Your ticket price: <strong><span style='font-family:DejaVu Sans;'>₹</span> 50</strong></p>
+  </div>
+</div>
+
+</body>
+</html>

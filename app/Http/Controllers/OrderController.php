@@ -159,8 +159,14 @@ class OrderController extends Controller
             $data = [
                 'user_id' => $user_data->id,
                 'toEmail' => $user_data->email,
+                'name' => $user_data->name,
+                'mobile_no' => $user_data->mobile_no,
+                'adhar_no' => $user_data->adhar_no,
                 'subject' => 'Get register successfully',
+                'orderId' => $order_id,
                 'uniqueId' => $ticket_uni_id,
+                'price' => config('app.ticket_price'),
+                'orderDate' => $user_data->updated_at,
             ];
 
             $htmlData = View::make('ticketview')
