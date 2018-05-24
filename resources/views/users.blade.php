@@ -34,7 +34,7 @@
     <div class="card" style="margin-top: 30px">
     <div class="card-header lighten-1">
         <div class="searchdiv">
-            <h4 style="flex-grow: 1; margin-top: 4px;">Users</h4>
+            <h4 style="flex-grow: 1; margin-top: 4px;">Tickets</h4>
             <input
               type="text"
               id="searchusers"
@@ -59,9 +59,9 @@
         <table class="table table-bordered">
             <thead style="background-color: #6f6c6c94;">
                 <tr>
-                    <th scope="col" class="text-center">#</th>
+                    <th scope="col" class="text-center">No</th>
                     <th scope="col" class="text-center">Adhar No</th>
-                    <th scope="col" class="text-center">Tickets</th>
+                    <th scope="col" class="text-center">Ticket No</th>
                     <th scope="col" class="text-center">Name</th>
                     <th scope="col" class="text-center">Email</th>
                     <th scope="col" class="text-center">Mobile No</th>
