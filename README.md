@@ -32,13 +32,13 @@ composer install
 Create a .env file in root of the project as per `.env.example` supplied, make changes according to your detail and for more detail of merchant account please see https://business.paytm.com/.
 ```
 
-* * Generate application key
+* Generate application key
 
 ```
 php artisan key:generate
 ```
 
-* * Link the storage
+* Link the storage
 
 ```
 php artisan storage:link
