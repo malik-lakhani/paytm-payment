@@ -17,9 +17,13 @@ return [
 
     'validity_date' => env('VALIDITY_DATE'),
 
-    'ticket_price' => env('TICKET_PRICE'),
+    'ticket_price' => env('TICKET_PRICE', 50),
 
-    'registration_limit' => env('REGISTRATION_LIMIT'),
+    'registration_limit' => env('REGISTRATION_LIMIT', 2500),
+
+    'admin_username' => env('ADMIN_USERNAME', 'admin'),
+
+    'admin_password' => env('ADMIN_PASSWORD', 'admin'),
 
     /*
     |--------------------------------------------------------------------------

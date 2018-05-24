@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 <!--===============================================================================================-->
-    <link rel="icon" type="image/png" href="images/icons/favicon.ico"/>
+    <link rel="icon" type="image/png" href="{{ asset('images/icons/favicon.ico') }}"/>
 <!--===============================================================================================-->
     <link rel="stylesheet" type="text/css" href="{{ asset('vendor/bootstrap/css/bootstrap.min.css') }}">
 <!--===============================================================================================-->
@@ -28,8 +28,14 @@
                 <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
             </li>
             </ul>
+            <div class="my-2 my-lg-0" style="color:white;">
+                <form action="{{ url('manage/logout') }}" method="GET">
+                    <button class="btn my-2 my-sm-0" type="submit">Logout</button>
+                </form>
+            </div>
         </div>
     </nav>
+
     <div class="container-fluid">
     <div class="card" style="margin-top: 30px">
     <div class="card-header lighten-1">

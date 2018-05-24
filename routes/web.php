@@ -18,4 +18,11 @@ Route::get('/', function () {
 Route::get('user-registration', 'OrderController@register')->name('user-registration');
 Route::post('payment', 'OrderController@order');
 
-Route::get('manage/users', 'UsersController@index');
+Route::prefix('manage')->group(function () {
+  Route::get('login', 'UsersController@login');
+  Route::post('login', 'UsersController@processLogin');
+  Route::get('logout', 'UsersController@logout');
+  Route::group(['middleware' => 'adminAuthenticate'], function ($url) {
+    Route::get('users', 'UsersController@index');
+  });
+});
