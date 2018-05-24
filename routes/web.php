@@ -11,9 +11,7 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/', 'OrderController@register')->name('user-registration');
 
 Route::get('user-registration', 'OrderController@register')->name('user-registration');
 Route::post('payment', 'OrderController@order');
@@ -23,6 +21,7 @@ Route::prefix('manage')->group(function () {
   Route::post('login', 'UsersController@processLogin');
   Route::get('logout', 'UsersController@logout');
   Route::group(['middleware' => 'adminAuthenticate'], function ($url) {
+    Route::get('/', 'UsersController@index');
     Route::get('users', 'UsersController@index');
   });
 });
